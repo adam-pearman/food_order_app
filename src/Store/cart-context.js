@@ -31,7 +31,7 @@ const cartReducer = (state, action) => {
         }
     }
 
-    if (action.type ==='REMOVE_ITEM') {
+    if (action.type === 'REMOVE_ITEM') {
         const existingCartItemIndex = state.items.findIndex(item => item.id === action.id)
         const existingCartItem = state.items[existingCartItemIndex]
         const updatedTotalAmount = state.totalAmount - existingCartItem.price
@@ -49,6 +49,10 @@ const cartReducer = (state, action) => {
             items: updatedItems,
             totalAmount: updatedTotalAmount
         }
+    }
+
+    if (action.type === 'CLEAR') {
+        return defaultCartState
     }
 
     throw new Error('Invalid action type.')
@@ -71,8 +75,12 @@ const CartProvider = ({children}) => {
         })
     }
 
+    const clearCart = () => {
+        dispatchCartAction({type: 'CLEAR'})
+    }
+
     return (
-        <CartContext.Provider value={{items: cartState.items, totalAmount: cartState.totalAmount, addItem, removeItem}}>
+        <CartContext.Provider value={{items: cartState.items, totalAmount: cartState.totalAmount, addItem, removeItem, clearCart}}>
             {children}
         </CartContext.Provider>
     )
